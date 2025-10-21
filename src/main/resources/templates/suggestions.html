@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Eco-Friendly Suggestions</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Add this to the <head> of every template -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Poppins', Arial, sans-serif;
+    font-weight: 400;
+    color: #222;
+  }
+  h1, h2, h3, .navbar-brand {
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+  .navbar-nav .nav-link {
+    font-weight: 600;
+  }
+  .btn, label, th, td {
+    font-weight: 600;
+  }
+  .suggestion-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .suggestion-list li {
+    transition: background 0.2s, font-weight 0.2s, color 0.2s;
+    padding: 12px 18px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    font-size: 1.08rem;
+    font-weight: 400;
+    background: #f9f9f9;
+    cursor: pointer;
+  }
+  .suggestion-list li:hover {
+    background: #ffe0ec;
+    font-weight: 800;
+    color: #d72660;
+    box-shadow: 0 2px 8px rgba(215,38,96,0.08);
+  }
+</style>
+<style>
+        body { font-family: 'Poppins', 'Roboto', sans-serif; background: linear-gradient(120deg, #e0f7fa 0%, #fffde4 100%); }
+        .card { border-radius: 18px; box-shadow: 0 4px 24px #b2dfdb33; }
+        .card-title { font-weight: 700; color: #388e3c; letter-spacing: 1px; text-shadow: 0 2px 8px #b2dfdb44; }
+        .list-group-item { font-size: 1.08rem; background: #f9fbe7; border: none; margin-bottom: 8px; border-radius: 12px; font-weight: 500; }
+        .btn { border-radius: 20px; font-weight: 600; letter-spacing: 0.5px; }
+        .navbar { background: #388e3c; border-radius: 0 0 18px 18px; }
+        .navbar-brand { color: #fff; font-weight: 700; font-size: 1.5rem; letter-spacing: 1px; }
+.navbar-nav .nav-link {
+    font-weight: 600;              /* Make font thicker */
+    color: #fff !important;        /* White by default */
+    transition: color 0.2s, background 0.2s;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link:focus {
+    color:rgb(37, 255, 240) !important;     /* Light blue on hover/focus */
+    transform: scale(1.05);
+}
+        h2 { font-family: 'Poppins', 'Roboto', sans-serif; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/index">EchoTrack</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/index">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/suggestions">Suggestions</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/history">History</a>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container py-5">
+        <div class="card shadow-lg mx-auto" style="max-width: 600px;">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Eco-Friendly Suggestions</h2>
+<!--               <ul class="list-group mb-3">
+                    <li class="list-group-item" th:each="suggestion : ${suggestions}" th:text="${suggestion}"></li>
+                </ul>
+                <ul class="suggestion-list">
+                    {% for suggestion in suggestions %}
+                        <li>{{ suggestion }}</li>
+                    {% endfor %}
+                </ul>
+-->
+                <ul class="suggestion-list">
+                    <li th:each="suggestion : ${suggestions}" th:text="${suggestion}"></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
