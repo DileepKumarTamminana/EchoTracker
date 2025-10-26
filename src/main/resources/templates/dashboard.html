@@ -83,11 +83,12 @@
         </div>
     </div>
     <script th:inline="javascript">
-        var total = [[${totalEmissions}]];
+        // Use Thymeleaf comment-based inlining to safely inject values into JS literals
+        var total = /*[[${totalEmissions}]]*/ 0;
         var ideal = 50;
         var percent = Math.min(100, Math.round((total / ideal) * 100));
         var allLabels = ['Car', 'Electricity', 'Water', 'Public Transport', 'Metro'];
-        var emissionsByCategory = [[${emissionsByCategory}]];
+        var emissionsByCategory = /*[[${emissionsByCategory}]]*/ {};
         var data = allLabels.map(function(label) {
             // Map backend keys to display labels
             var key = label.toLowerCase().replace(' ', '_');
@@ -154,5 +155,6 @@
             el.textContent = totalVal.toFixed(2);
         });
     </script>
+    <div th:replace="fragments/footer :: footer"></div>
 </body>
 </html>

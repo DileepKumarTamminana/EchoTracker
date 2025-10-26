@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="footer">
+    <footer class="text-center py-3 mt-4">
+        <hr/>
+        <p class="text-muted mb-0">&copy; <span th:text="${#dates.format(#dates.createNow(),'yyyy')}">2025</span> EchoTrack — All rights reserved.</p>
+    </footer>
+</div>
