@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Activities')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('activities')}"></nav>
+
+<main class="page">
+    <div class="container">
+        <div class="page-head">
+            <h1>Log an activity</h1>
+            <p>Record what you did and we'll estimate the carbon it produced.</p>
+        </div>
+
+        <div th:replace="~{fragments/layout :: flash}"></div>
+
+        <!-- Add form -->
+        <div class="card">
+            <form th:action="@{/activities}" method="post" th:object="${activityForm}">
+                <div class="input-row">
+                    <div class="form-group">
+                        <label for="type">Activity</label>
+                        <select class="form-control" id="type" th:field="*{type}" onchange="updateUnit()">
+                            <option value="" disabled th:selected="*{type == null}">Choose…</option>
+                            <option th:each="t : ${allTypes}" th:value="${t}"
+                                    th:attr="data-unit=${t.unit}"
+                                    th:text="${t.icon + '  ' + t.label}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="amount">Amount <span class="muted" id="unitHint"></span></label>
+                        <input class="form-control" type="number" step="any" min="0" id="amount" th:field="*{amount}"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input class="form-control" type="date" id="date" th:field="*{date}"/>
+                    </div>
+                    <div class="form-group" style="flex:0 0 auto;">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-primary" type="submit">＋ Add</button>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-top:0.75rem;margin-bottom:0;">
+                    <input class="form-control" type="text" id="note" th:field="*{note}" placeholder="Optional note (e.g. commute to office)"/>
+                </div>
+                <div class="field-error mt-1" th:if="${#fields.hasErrors('type')}" th:errors="*{type}"></div>
+                <div class="field-error" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div>
+                <div class="field-error" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"></div>
+            </form>
+        </div>
+
+        <!-- List -->
+        <div class="card mt-3">
+            <div class="flex-between">
+                <h3 class="card-title" style="margin:0;">Your activities</h3>
+                <div>
+                    <a th:href="@{/export/activities.csv}" class="btn btn-ghost btn-sm">⬇ CSV</a>
+                    <a th:href="@{/export/report.pdf}" class="btn btn-ghost btn-sm">⬇ PDF report</a>
+                </div>
+            </div>
+
+            <table class="table mt-2" th:if="${!activities.isEmpty()}">
+                <thead>
+                <tr>
+                    <th>Date</th><th>Activity</th><th>Amount</th><th>CO₂e (kg)</th><th>Note</th><th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="a : ${activities}">
+                    <td th:text="${#temporals.format(a.date, 'dd MMM yyyy')}">01 Jan 2025</td>
+                    <td><span th:text="${a.type.icon}">🚗</span> <span th:text="${a.type.label}">Car</span></td>
+                    <td><span th:text="${a.amount}">0</span> <span class="muted" th:text="${a.type.unit}">km</span></td>
+                    <td><strong th:text="${a.co2Kg}">0</strong></td>
+                    <td class="muted" th:text="${a.note}"></td>
+                    <td style="text-align:right;">
+                        <form th:action="@{'/activities/' + ${a.id} + '/delete'}" method="post"
+                              onsubmit="return confirm('Delete this activity?');" style="margin:0;">
+                            <button class="btn btn-danger btn-sm" type="submit">✕</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <p class="muted text-center" th:if="${activities.isEmpty()}" style="padding:2rem 0;">
+                No activities logged yet. Add your first one above! 🌱
+            </p>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+<script>
+    function updateUnit() {
+        const sel = document.getElementById('type');
+        const opt = sel.options[sel.selectedIndex];
+        const unit = opt ? opt.getAttribute('data-unit') : '';
+        document.getElementById('unitHint').textContent = unit ? '(' + unit + ')' : '';
+    }
+    document.addEventListener('DOMContentLoaded', updateUnit);
+</script>
+</body>
+</html>

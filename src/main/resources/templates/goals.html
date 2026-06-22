@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Goals')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('goals')}"></nav>
+
+<main class="page">
+    <div class="container">
+        <div class="page-head">
+            <h1>Monthly carbon goal</h1>
+            <p>Set a budget and track your progress through the month.</p>
+        </div>
+
+        <div th:replace="~{fragments/layout :: flash}"></div>
+
+        <div class="grid cols-2">
+            <div class="card">
+                <h3 class="card-title">Set your target</h3>
+                <form th:action="@{/goals}" method="post" th:object="${goalForm}">
+                    <div class="form-group">
+                        <label for="monthlyTargetKg">Monthly target (kg CO₂e)</label>
+                        <input class="form-control" type="number" step="any" min="1" id="monthlyTargetKg" th:field="*{monthlyTargetKg}"/>
+                        <div class="field-error" th:if="${#fields.hasErrors('monthlyTargetKg')}" th:errors="*{monthlyTargetKg}"></div>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Save goal</button>
+                </form>
+                <p class="muted mt-2" style="font-size:0.85rem;">
+                    Tip: an average person's footprint is roughly 300–400 kg CO₂e per month.
+                    Aim a little below your current level and reduce gradually.
+                </p>
+            </div>
+
+            <div class="card">
+                <h3 class="card-title">This month</h3>
+                <div th:if="${goalProgress.hasGoal()}">
+                    <p class="muted">
+                        <span th:text="${goalProgress.usedKg()}">0</span> of
+                        <span th:text="${goalProgress.targetKg()}">0</span> kg CO₂e used
+                    </p>
+                    <div class="progress">
+                        <div class="progress-bar" th:classappend="${goalProgress.exceeded()} ? 'over'"
+                             th:style="'width:' + ${goalProgress.percent()} + '%'"></div>
+                    </div>
+                    <p class="mt-2" th:if="${!goalProgress.exceeded()}">
+                        ✅ You have <strong th:text="${goalProgress.remainingKg()}">0</strong> kg CO₂e left this month.
+                    </p>
+                    <p class="mt-2" th:if="${goalProgress.exceeded()}" style="color:var(--danger);">
+                        ⚠️ You've gone over your budget by
+                        <strong th:text="${goalProgress.usedKg() - goalProgress.targetKg()}">0</strong> kg CO₂e.
+                    </p>
+                </div>
+                <p class="muted" th:unless="${goalProgress.hasGoal()}">No goal set yet — add one to start tracking.</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!--
+  Shared layout fragments for EchoTracker.
+  Pages pull these in with th:replace.
+-->
+<head th:fragment="head(title)">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="'EchoTracker · ' + ${title}">EchoTracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/app.css}"/>
+    <!-- Theme init runs early to avoid a flash of the wrong theme -->
+    <script th:src="@{/js/app.js}"></script>
+    <link rel="icon"
+          href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🌿%3C/text%3E%3C/svg%3E"/>
+</head>
+
+<body>
+<!-- ===== Top navigation ===== -->
+<nav th:fragment="navbar(active)" class="navbar">
+    <div class="container">
+        <a class="brand" th:href="@{/dashboard}"><span class="leaf">🌿</span> EchoTracker</a>
+        <div class="nav-links">
+            <a th:href="@{/dashboard}" th:classappend="${active == 'dashboard'} ? 'active'">Dashboard</a>
+            <a th:href="@{/activities}" th:classappend="${active == 'activities'} ? 'active'">Activities</a>
+            <a th:href="@{/history}" th:classappend="${active == 'history'} ? 'active'">History</a>
+            <a th:href="@{/goals}" th:classappend="${active == 'goals'} ? 'active'">Goals</a>
+            <a th:href="@{/suggestions}" th:classappend="${active == 'suggestions'} ? 'active'">Tips</a>
+            <a th:href="@{/profile}" th:classappend="${active == 'profile'} ? 'active'">Profile</a>
+            <button type="button" id="themeToggle" class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">🌙</button>
+            <form th:action="@{/logout}" method="post" style="margin:0;">
+                <button type="submit" class="logout-btn">Logout</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<!-- ===== Flash messages ===== -->
+<div th:fragment="flash">
+    <div th:if="${flashSuccess}" class="alert alert-success" th:text="${flashSuccess}"></div>
+    <div th:if="${flashError}" class="alert alert-danger" th:text="${flashError}"></div>
+    <div th:if="${flashBadges}" class="alert alert-success">
+        🎉 New badge unlocked:
+        <span th:each="b,it : ${flashBadges}">
+            <strong th:text="${b}"></strong><span th:if="${!it.last}">, </span>
+        </span>
+    </div>
+</div>
+
+<!-- ===== Footer ===== -->
+<footer th:fragment="footer" class="site-footer">
+    🌍 EchoTracker — track, understand and shrink your carbon footprint.
+    <span th:if="${currentUser}"> · Signed in as <strong th:text="${currentUser.username}">user</strong></span>
+</footer>
+
+<!-- ===== Common scripts (Chart.js) ===== -->
+<th:block th:fragment="scripts">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</th:block>
+</body>
+</html>

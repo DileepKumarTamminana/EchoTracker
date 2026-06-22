@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### EchoTracker H2 file database ###
+/data/
+
+### Runtime logs ###
+*.log
