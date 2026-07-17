@@ -20,8 +20,8 @@ jobs:
           java-version: '17' # Specify your Java version (e.g., '11', '17', '21')
           distribution: 'temurin' # Temurin is the recommended default
 
-      - name: build
-        run: mvn clean package
+    #  - name: build
+    #    run: mvn clean package
 
       - name: unit testing
         run: mvn test
