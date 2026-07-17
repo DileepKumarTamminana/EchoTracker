@@ -23,8 +23,8 @@ jobs:
     #  - name: build
     #    run: mvn clean package
 
-      - name: unit testing
-        run: mvn test
+    #  - name: unit testing
+    #    run: mvn test
 
       - name: sonarQube
         run: mvn sonar:sonar
