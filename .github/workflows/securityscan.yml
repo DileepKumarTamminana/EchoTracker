@@ -1,35 +1,43 @@
 name: Vul ckeck pipeline
+
 on:
   push:
-    branches: ["main","master"]
+    branches: ["main", "master"]
   pull_request: 
-    branches: ["main","master"]
+    branches: ["main", "master"]
+
 jobs:
   vul-pipeline:
     runs-on: ubuntu-22.04
 
     steps:
-    
- -name: checkout code from author
-uses: actions/checkout@v4
+      - name: checkout code from author
+        uses: actions/checkout@v4
 
--name: setup env.
-uses: actions/setup-java@v4
+      - name: setup env.
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17' # Specify your Java version (e.g., '11', '17', '21')
+          distribution: 'temurin' # Temurin is the recommended default
 
--name: build
-run: mvn clean package
+      - name: build
+        run: mvn clean package
 
--name: unit testing
-run: mvn test
+      - name: unit testing
+        run: mvn test
 
--name: sonarQube
-run: mvn sonar:sonar
+      - name: sonarQube
+        run: mvn sonar:sonar
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # SonarQube usually requires an authentication token
 
--name: snyk-scan
-run: snyk test
+      - name: snyk-scan
+        uses: snyk/actions/maven@master # Using the official Snyk action is highly recommended
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }} # Snyk requires an API token to run
 
--name: save-reports
-uses: actions/upload-artifact@v4
-with: 
-name: Security-Reports
-path: /src/reports/
+      - name: save-reports
+        uses: actions/upload-artifact@v4
+        with: 
+          name: Security-Reports
+          path: src/reports/ # Fixed the path (removed leading slash)
