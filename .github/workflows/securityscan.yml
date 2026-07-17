@@ -1,0 +1,31 @@
+name: Vul ckeck pipeline
+on:
+  push:
+    branches: ["main","master"]
+jobs:
+  vul-pipeline:
+  runs-on: ubuntu-latest
+
+-name: checkout code from author
+uses: actions/checkout@v4
+
+-name: setup env.
+uses: actions/setup-java@v4
+
+-name: build
+run: mvn clean package
+
+-name: unit testing
+run: mvn test
+
+-name: sonarQube
+run: mvn sonar:sonar
+
+-name: snyk-scan
+run: snyk test
+
+-name: save-reports
+uses: actions/upload-artifact@v4
+with: 
+name: Security-Reports
+path: /src/reports/
